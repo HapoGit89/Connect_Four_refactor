@@ -15,6 +15,18 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  *   board = array of rows, each row is array of cells  (board[y][x])
  */
 
+class Game {
+  constructor(height, width){
+    this.WIDTH = width;
+    this.HEIGHT = height;
+    this.board = []
+    this.currPlayer = 1;
+
+  }
+
+}
+
+
 function makeBoard() {
   for (let y = 0; y < HEIGHT; y++) {
     board.push(Array.from({ length: WIDTH }));

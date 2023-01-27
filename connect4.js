@@ -103,14 +103,25 @@ class Game {
   }
 
   makeAIMove(){
-      let x = this.ai.makeMove()
-    const y = this.findSpotForCol(x);
+    let x = this.ai.makeMove()
+    let y = this.findSpotForCol(x);
     if (y === null) {
-      return;
+    for(;x < this.WIDTH; x++){
+      if (this.findSpotForCol(x)!== null) {break}
     }
-  
+    if(x = this.WIDTH){x= x-1}
+    if (this.findSpotForCol(x)===null){
+      for(;x >=0; x--){
+        if (this.findSpotForCol(x)!== null) {break}
+    }}
+    if (x<0){x+=1}
+    if (this.findSpotForCol(x)===null){this.endGame(`Tie`);}
+    else {y = this.findSpotForCol(x)}}
+
+
     // place piece in board and add to HTML table
     this.board[y][x] = this.currPlayer;
+    console.log(x,y)
     this.placeInTable(y, x);
     
     // check for win
@@ -166,7 +177,6 @@ checkForWin() {
       // Check four cells to see if they're all color of current player
       //  - cells: list of four (y, x) cells
       //  - returns true if all are legal coordinates & all match currPlayer
-      console.log(height, width)
       return cells.every(
         ([y, x])=>
           y >= 0 &&

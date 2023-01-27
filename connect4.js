@@ -15,6 +15,19 @@
  *   board = array of rows, each row is array of cells  (board[y][x])
  */
 
+class AIPlayer {
+  constructor(height, width){
+    this.height = height;
+    this.width = width;
+  }
+
+  makeMove(){
+    let x = Math.floor(Math.random()*this.width)
+    return x
+  }
+
+}
+
 class Game {
   constructor(height, width){
     this.WIDTH = width;
@@ -24,7 +37,8 @@ class Game {
     this.makeBoard();
     this.makeHtmlBoard();
     this.checkForWin = this.checkForWin.bind(this)
-
+    this.makeAIMove = this.makeAIMove.bind(this)
+    this.ai = new AIPlayer(height, width)
 
   }
 
@@ -88,10 +102,33 @@ class Game {
     alert(msg);
   }
 
+  makeAIMove(){
+      let x = this.ai.makeMove()
+    const y = this.findSpotForCol(x);
+    if (y === null) {
+      return;
+    }
+  
+    // place piece in board and add to HTML table
+    this.board[y][x] = this.currPlayer;
+    this.placeInTable(y, x);
+    
+    // check for win
+    if (this.checkForWin()) {
+      return this.endGame(`Player ${this.currPlayer} won!`);
+    }
+    
+    // check for tie
+    if (this.board.every(row => row.every(cell => cell))) {
+      return this.endGame('Tie!');
+    }
 
+    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+
+  }
   handleClick(evt) {
     // get x from ID of clicked cell
-    
+    if (this.currPlayer === 1){
     const x = +evt.target.id;
     // get next spot in column (if none, ignore click)
     const y = this.findSpotForCol(x);
@@ -115,7 +152,9 @@ class Game {
       
     // switch players
     this.currPlayer = this.currPlayer === 1 ? 2 : 1;
-  }
+
+    setTimeout(this.makeAIMove, 1000)
+  }}
 
 
 checkForWin() {
